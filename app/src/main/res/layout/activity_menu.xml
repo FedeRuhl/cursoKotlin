@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background4"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+    <!---Extiende de view group-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_horizontal"
+        android:text="@string/label_welcome"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/white" />
+    <!---Extiende de views-->
+
+    <!-- Para agregar iconos de android vamos a drawable, clic derecho, new, vector asset  -->
+
+    <Button
+        android:id="@+id/btnCreateAppointment"
+        style="@style/MenuButton"
+        android:layout_width="match_parent"
+        android:background="@color/colorAccent"
+        android:drawableStart="@drawable/ic_add_circle"
+        android:text="@string/btn_create_appointment"
+        android:textColor="@color/whiteTransparent" />
+
+    <Button
+        android:id="@+id/btnMyAppointments"
+        style="@style/MenuButton"
+        android:layout_width="match_parent"
+        android:background="@color/colorAccent"
+        android:drawableStart="@drawable/ic_calendar"
+        android:text="@string/btn_my_appointments"
+        android:textColor="@color/whiteTransparent" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        style="@style/MenuButton"
+        android:layout_width="match_parent"
+        android:background="@color/colorAccent"
+        android:drawableStart="@drawable/ic_power_off"
+        android:text="@string/btn_logout"
+        android:textColor="@color/whiteTransparent" />
+
+</LinearLayout>

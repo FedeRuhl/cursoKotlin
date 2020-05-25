@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">S.R. Turnos</string>
+    <string name="label_login">Inicio de sesión</string>
+    <string name="label_email">Correo electrónico</string>
+    <string name="label_password">Contraseña</string>
+    <string name="btn_login">Ingresar</string>
+    <string name="label_go_to_register">¿Aún no te has registrado?</string>
+    <string name="label_register">Registro</string>
+    <string name="label_name">Nombre completo</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="label_go_to_login">¿Ya tienes una cuenta?</string>
+    <string name="please_fill_your_register_data">Por favor, completa tus datos</string>
+    <string name="btn_create_appointment">Reservar turno</string>
+    <string name="btn_my_appointments">Mis turnos</string>
+    <string name="btn_logout">Cerrar sesión</string>
+    <string name="label_welcome">Bienvenido</string>
+    <string name="label_create_appointment">Registrar turno</string>
+    <string name="label_description">Descripcion</string>
+    <string name="label_specialty">Especialidad</string>
+    <string name="label_tpye">Tipo de turno</string>
+    <string name="rb_type_consultation">Consulta</string>
+    <string name="rb_type_examination">Examen</string>
+    <string name="rb_type_operation">Operación</string>
+    <string name="btn_next">Siguiente</string>
+    <string name="label_doctor">Médico</string>
+    <string name="label_scheduled_date">Fecha para el turno</string>
+    <string name="btn_confirm">Confirmar</string>
+    <string name="date_format">%1$d-%2$s-%3$s</string>
+</resources>
