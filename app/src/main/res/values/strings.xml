@@ -26,4 +26,8 @@
     <string name="label_scheduled_date">Fecha para el turno</string>
     <string name="btn_confirm">Confirmar</string>
     <string name="date_format">%1$d-%2$s-%3$s</string>
+    <string name="item_appointment_id">Turno médico # %1$d</string>
+    <string name="item_appointment_date">Atención el día %1$s</string>
+    <string name="item_appointment_time">A las %1$s</string>
+    <string name="label_my_appointments">Mis citas médicas</string>
 </resources>
