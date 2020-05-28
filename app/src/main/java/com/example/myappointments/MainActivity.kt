@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
         btnLogin.setOnClickListener{
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
+            finish()
+             //finaliza con main activity
         }
 
         tvGoToRegister.setOnClickListener{
