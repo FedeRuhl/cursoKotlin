@@ -17,6 +17,10 @@ class MainActivity : AppCompatActivity() {
         Snackbar.make(mainLayout, R.string.press_back_agaian, Snackbar.LENGTH_SHORT)
     }
 
+    private val preferences by lazy {
+        PreferenceHelper.defaultPrefs(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 //        val preferences = getSharedPreferences("general", Context.MODE_PRIVATE)
 //        val session = preferences.getBoolean("session", false) //si la variable no se ha creado, devuelve falso
 
-        val preferences = PreferenceHelper.defaultPrefs(this)
         if (preferences["session", false])
             goToMenuAcitivity()
 
@@ -55,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 //        val editor = preferences.edit()
 //        editor.putBoolean("session", true)
 //        editor.apply()
-        val preferences = PreferenceHelper.defaultPrefs(this)
         preferences["session"] = true
     }
 
