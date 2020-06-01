@@ -1,15 +1,16 @@
 package com.example.myappointments
 
 import android.app.DatePickerDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.activity_create_appointment.*
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.card_view_step_one.*
+import kotlinx.android.synthetic.main.card_view_step_three.*
+import kotlinx.android.synthetic.main.card_view_step_two.*
 import java.util.*
 
 class CreateAppointmentActivity : AppCompatActivity() {
@@ -21,12 +22,22 @@ class CreateAppointmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_appointment)
 
-        btnNext.setOnClickListener {
+        btnNextToStep2.setOnClickListener {
             if (etDescription.text.toString().length < 3)
                 etDescription.error = getString(R.string.validate_appointment_description)
             else {
                 cvStep1.visibility = View.GONE;
                 cvStep2.visibility = View.VISIBLE;
+            }
+        }
+
+        btnNextToStep3.setOnClickListener {
+            if (etScheduledDate.text.isNullOrEmpty())
+                etScheduledDate.error = getString(R.string.validate_appointment_scheduled_date)
+            else{
+                showAppointmentDataToConfirm()
+                cvStep2.visibility = View.GONE
+                cvStep3.visibility = View.VISIBLE
             }
         }
 
@@ -45,12 +56,24 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
     }
 
+    private fun showAppointmentDataToConfirm() {
+        tvConfirmDescription.text = etDescription.text.toString()
+        tvConfirmSpecialty.text = spinnerSpecialties.selectedItem.toString()
+        val selectedRadioBtnId = rgType.checkedRadioButtonId
+        val selectedRadioType = rgType.findViewById<RadioButton>(selectedRadioBtnId)
+        tvConfirmType.text = selectedRadioType.text.toString()
+
+        tvConfirmDoctor.text = spinnerDoctors.selectedItem.toString()
+        tvConfirmScheduledDate.text = etScheduledDate.text.toString()
+        tvConfirmScheduledTime.text = selectedRadioButton?.text.toString()
+    }
+
     fun onClickScheduledDate(v: View?) {
         val year = selectedCalendar.get(Calendar.YEAR)
         val month = selectedCalendar.get(Calendar.MONTH)
         val dayOfMonth = selectedCalendar.get(Calendar.DAY_OF_MONTH)
 
-        val listener = DatePickerDialog.OnDateSetListener { view, y, m, d ->
+        val listener = DatePickerDialog.OnDateSetListener { _, y, m, d ->
             //Toast.makeText(this, "$y-$m-$d", Toast.LENGTH_SHORT).show()
             selectedCalendar.set(y, m, d)
             etScheduledDate.setText(
@@ -108,22 +131,32 @@ class CreateAppointmentActivity : AppCompatActivity() {
     private fun Int.twoDigits() = if (this > 9) this.toString() else "0$this" //extension function
 
     override fun onBackPressed() {
-        if (cvStep2.visibility == View.VISIBLE) {
-            cvStep2.visibility = View.GONE
-            cvStep1.visibility = View.VISIBLE
-        } else if (cvStep1.visibility == View.VISIBLE) {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle(getString(R.string.dialog_create_appointment_exit_title))
-            builder.setMessage(getString(R.string.dialog_create_appointment_exit_message))
-            builder.setPositiveButton(getString(R.string.dialog_create_appointment_exit_positive)) { _, _ ->
-                finish()
+        when {
+            cvStep1.visibility == View.VISIBLE -> {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(getString(R.string.dialog_create_appointment_exit_title))
+                builder.setMessage(getString(R.string.dialog_create_appointment_exit_message))
+                builder.setPositiveButton(getString(R.string.dialog_create_appointment_exit_positive)) { _, _ ->
+                    finish()
+                }
+                builder.setNegativeButton(getString(R.string.dialog_create_appointment_exit_negative)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                val dialog = builder.create()
+                dialog.show()
+                //super.onBackPressed()
             }
-            builder.setNegativeButton(getString(R.string.dialog_create_appointment_exit_negative)) { dialog, _ ->
-                dialog.dismiss()
+
+            cvStep2.visibility == View.VISIBLE -> {
+                cvStep2.visibility = View.GONE
+                cvStep1.visibility = View.VISIBLE
             }
-            val dialog = builder.create()
-            dialog.show()
-            //super.onBackPressed()
+
+            cvStep3.visibility == View.VISIBLE -> {
+                cvStep3.visibility = View.GONE
+                cvStep2.visibility = View.VISIBLE
+            }
+
         }
 
 
