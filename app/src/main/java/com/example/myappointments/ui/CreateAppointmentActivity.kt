@@ -3,11 +3,13 @@ package com.example.myappointments.ui
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myappointments.Model.Doctor
 import com.example.myappointments.Model.Specialty
 import com.example.myappointments.R
 import com.example.myappointments.io.ApiService
@@ -70,11 +72,61 @@ class CreateAppointmentActivity : AppCompatActivity() {
 
         loadSpecialties()
 
-
+        listenSpecialtyChanges()
         val doctorOptions = arrayOf("Doctor A", "Doctor B", "Doctor C")
         spinnerDoctors.adapter =
             ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, doctorOptions)
 
+    }
+
+    private fun listenSpecialtyChanges() {
+        spinnerSpecialties.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+        }
+
+            override fun onItemSelected(
+                adapter: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val specialty = adapter?.getItemAtPosition(position) as Specialty
+                loadDoctors(specialty.id)
+            }
+
+        }
+    }
+
+    private fun loadDoctors(id: Int) {
+        val call = apiService.getDoctors(id)
+        call.enqueue(object : Callback<ArrayList<Doctor>> {
+            override fun onFailure(call: Call<ArrayList<Doctor>>, t: Throwable) {
+                Toast.makeText(
+                    this@CreateAppointmentActivity,
+                    getString(R.string.error_loading_doctors),
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
+            }
+
+            override fun onResponse(
+                call: Call<ArrayList<Doctor>>,
+                response: Response<ArrayList<Doctor>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let{
+                        val doctors = it.toMutableList()
+                        spinnerDoctors.adapter = ArrayAdapter(
+                            this@CreateAppointmentActivity,
+                            android.R.layout.simple_list_item_1,
+                            doctors
+                        )
+                    }
+                }
+            }
+
+        })
     }
 
     private fun loadSpecialties() {
@@ -86,24 +138,20 @@ class CreateAppointmentActivity : AppCompatActivity() {
                     getString(R.string.error_loading_specialties),
                     Toast.LENGTH_SHORT
                 ).show()
-                //finish()
+                finish()
             }
 
-            override fun onResponse(
-                call: Call<ArrayList<Specialty>>,
-                response: Response<ArrayList<Specialty>>
-            ) {
+            override fun onResponse(call: Call<ArrayList<Specialty>>, response: Response<ArrayList<Specialty>>)
+            {
                 if (response.isSuccessful) { //codigo respuesta entre 200 y 300
-                    val specialties = response.body()
-                    val specialtyOptions = ArrayList<String>()
-                    specialties?.forEach {
-                        specialtyOptions.add(it.name)
+                    response.body()?.let{
+                        val specialties = it.toMutableList()
+                        spinnerSpecialties.adapter = ArrayAdapter(
+                            this@CreateAppointmentActivity,
+                            android.R.layout.simple_list_item_1,
+                            specialties
+                        )
                     }
-                    spinnerSpecialties.adapter = ArrayAdapter<String>(
-                        this@CreateAppointmentActivity,
-                        android.R.layout.simple_list_item_1,
-                        specialtyOptions
-                    )
                 }
             }
 
