@@ -1,11 +1,11 @@
-package com.example.myappointments
+package com.example.myappointments.ui
 
-import Model.Appointment
-import android.content.res.Resources
+import com.example.myappointments.Model.Appointment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myappointments.R
 import kotlinx.android.synthetic.main.item_appointment.view.*
 
 class AppointmentAdapter(private val appointments:ArrayList<Appointment>) : RecyclerView.Adapter<AppointmentAdapter.ViewHolder>(){
@@ -24,7 +24,11 @@ class AppointmentAdapter(private val appointments:ArrayList<Appointment>) : Recy
     // crear la vista a partir del XML - 3
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_appointment, parent, false)
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_appointment,
+                parent,
+                false
+            )
         )
     }
 

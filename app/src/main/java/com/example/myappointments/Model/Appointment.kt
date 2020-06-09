@@ -1,4 +1,4 @@
-package Model
+package com.example.myappointments.Model
 
 data class Appointment (
     val id:Int,

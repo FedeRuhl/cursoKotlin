@@ -40,4 +40,5 @@
     <string name="label_confirm_appointment_data">Datos del turno</string>
     <string name="validate_appointment_scheduled_date">Debe ingresar una fecha correctamente</string>
     <string name="validate_appointment_time">Es necesario definir un horario para el turno</string>
+    <string name="error_loading_specialties">Ocurrió un problema al cargar las especialidades</string>
 </resources>

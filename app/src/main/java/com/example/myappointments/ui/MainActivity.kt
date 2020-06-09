@@ -1,20 +1,21 @@
-package com.example.myappointments
+package com.example.myappointments.ui
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
+import com.example.myappointments.PreferenceHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import com.example.myappointments.PreferenceHelper.get
 import com.example.myappointments.PreferenceHelper.set
+import com.example.myappointments.R
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
     private val snackBar by lazy { //se inicializa en null pero cuando se la requiera, recien ahi se va a inicializar
-        Snackbar.make(mainLayout, R.string.press_back_agaian, Snackbar.LENGTH_SHORT)
+        Snackbar.make(mainLayout,
+            R.string.press_back_agaian, Snackbar.LENGTH_SHORT)
     }
 
     private val preferences by lazy {

@@ -7,7 +7,7 @@
     android:visibility="gone"
     app:cardCornerRadius="8dp"
     app:contentPadding="12dp"
-    tools:context=".CreateAppointmentActivity">
+    tools:context=".ui.CreateAppointmentActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

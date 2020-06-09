@@ -7,7 +7,7 @@
     android:background="@drawable/bg_gradient"
     android:orientation="vertical"
     android:padding="12dp"
-    tools:context=".RegisterActivity">
+    tools:context=".ui.RegisterActivity">
     <!---Extiende de view group-->
 
     <TextView

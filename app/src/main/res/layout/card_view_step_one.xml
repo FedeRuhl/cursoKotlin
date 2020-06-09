@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
     app:contentPadding="12dp"
-    tools:context=".CreateAppointmentActivity">
+    tools:context=".ui.CreateAppointmentActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
