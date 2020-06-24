@@ -8,15 +8,34 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myappointments.R
 import kotlinx.android.synthetic.main.item_appointment.view.*
 
-class AppointmentAdapter(private val appointments:ArrayList<Appointment>) : RecyclerView.Adapter<AppointmentAdapter.ViewHolder>(){
+class AppointmentAdapter : RecyclerView.Adapter<AppointmentAdapter.ViewHolder>(){
+
+    var appointments = ArrayList<Appointment>()
+
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
 
         fun bind(appointment: Appointment) = with(itemView){
             tvAppointmentId.text = context.getString(R.string.item_appointment_id, appointment.id)
-            tvDoctorName.text = appointment.doctorName
+            tvDoctorName.text = appointment.doctor.name
             tvScheduledDate.text = context.getString(R.string.item_appointment_date, appointment.scheduledDate)
             tvScheduledTime.text = context.getString(R.string.item_appointment_time, appointment.scheduledTime)
             //el with evita escribir itemView.tvAppointmentId, itemView.tvDoctorName, itemView.context, etc.
+            tvSpecialty.text = appointment.specialty.name
+            tvDescription.text = appointment.description
+            tvStatus.text = appointment.status
+            tvType.text = appointment.type
+            tvCreatedAt.text = context.getString(R.string.item_appointment_created_at, appointment.createdAt)
+
+            ibExpand.setOnClickListener {
+                if (llDetails.visibility == View.VISIBLE){
+                    llDetails.visibility = View.GONE
+                    ibExpand.setImageResource(R.drawable.ic_expand_more)
+                }
+                else{
+                    llDetails.visibility = View.VISIBLE
+                    ibExpand.setImageResource(R.drawable.ic_expand_less)
+                }
+            }
         }
 
     }

@@ -1,5 +1,6 @@
 package com.example.myappointments.io
 
+import com.example.myappointments.Model.Appointment
 import com.example.myappointments.Model.Doctor
 import com.example.myappointments.Model.Schedule
 import com.example.myappointments.Model.Specialty
@@ -30,6 +31,8 @@ interface ApiService {
     fun postLogout(@Header("Authorization") authHead:String): Call<Void> // no nos interesa lo que devuelva el método
     //el token no se envía como parámetro sino que como header
 
+    @GET("appointments")
+    fun getAppointments(@Header("Authorization") authHead:String): Call<ArrayList<Appointment>>
 
     companion object Factory{
         private const val BASE_URL = "http://167.99.65.203/api/"

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.MainActivity"
-    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="3dp"
     app:cardElevation="4dp"
-    app:cardCornerRadius="3dp">
+    app:cardUseCompatPadding="true"
+    tools:context=".ui.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,30 +22,90 @@
             android:id="@+id/tvAppointmentId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Cita médica #7"/>
+            tools:text="Cita médica #7" />
 
         <TextView
             android:id="@+id/tvDoctorName"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Medico"
             android:gravity="center_horizontal"
-            style="@style/TextAppearance.AppCompat.Medium"/>
+            tools:text="Medico" />
 
         <TextView
             android:id="@+id/tvScheduledDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            tools:text="12/12/2020"/>
+            tools:text="12/12/2020" />
 
         <TextView
             android:id="@+id/tvScheduledTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            tools:text="15:00"/>
+            tools:text="15:00" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                tools:text="Confirmada" />
+
+            <ImageButton
+                android:id="@+id/ibExpand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@color/white"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_expand_more" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/llDetails"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSpecialty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Neurología" />
+
+            <TextView
+                android:id="@+id/tvType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Consulta" />
+
+            <TextView
+                android:id="@+id/tvCreatedAt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Turno reservado el día 22/11/2020 con la siguiente descripción" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Tengo dolor de cabeza" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

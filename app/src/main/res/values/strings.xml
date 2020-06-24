@@ -50,4 +50,5 @@
     <string name="error_invalid_credentials">Credenciales incorrectas</string>
     <string name="welcome_name">Bienvenido %1$s</string>
     <string name="login_failure">Los campos deben ser ingresados correctamente</string>
+    <string name="item_appointment_created_at"> "Turno reservado el día %1$s con la siguiente descripción: " </string>
 </resources>

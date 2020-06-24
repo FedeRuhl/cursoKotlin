@@ -76,13 +76,14 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val loginResponse = response.body()
-                        if (loginResponse == null) { //401 Unauthorized
+                        loginResponse?.let {
+                            createSessionPreference(loginResponse.access_token)
+                            toast(getString(R.string.welcome_name, loginResponse.user.name))
+                            goToMenuActivity()
+                        } ?: run { //401 Unauthorized
                             toast(getString(R.string.error_login_response))
                             return
                         }
-                        createSessionPreference(loginResponse.access_token)
-                        toast(getString(R.string.welcome_name, loginResponse.user.name))
-                        goToMenuActivity()
                     } else {
                         toast(getString(R.string.error_invalid_credentials))
                     }
