@@ -57,4 +57,6 @@
     <string name="error_register_empty_fields">Por favor, complete todos los campos.</string>
     <string name="error_register_password_do_not_match">Las contraseñas no coinciden</string>
     <string name="error_register_user">Ha ocurrido un error al intentar registrar el usuario.</string>
+    <string name="default_notification_channel_id">default_channel</string>
+    <string name="fcm_message">title</string>
 </resources>
