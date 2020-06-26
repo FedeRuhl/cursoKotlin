@@ -16,6 +16,10 @@ import com.example.myappointments.Model.Schedule
 import com.example.myappointments.Model.Specialty
 import com.example.myappointments.R
 import com.example.myappointments.io.ApiService
+import com.example.myappointments.io.response.SimpleResponse
+import com.example.myappointments.util.PreferenceHelper
+import com.example.myappointments.util.PreferenceHelper.get
+import com.example.myappointments.util.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_create_appointment.*
 import kotlinx.android.synthetic.main.card_view_step_one.*
@@ -29,8 +33,12 @@ import kotlin.collections.ArrayList
 
 class CreateAppointmentActivity : AppCompatActivity() {
 
-    private val apiService:ApiService by lazy {
+    private val apiService: ApiService by lazy {
         ApiService.create()
+    }
+
+    private val preferences by lazy{
+        PreferenceHelper.defaultPrefs(this)
     }
 
     private val selectedCalendar = Calendar.getInstance()
@@ -69,14 +77,45 @@ class CreateAppointmentActivity : AppCompatActivity() {
         }
 
         btnConfirm.setOnClickListener {
-            Toast.makeText(this, "Turno registrado correctamente", Toast.LENGTH_LONG).show()
-            finish()
+            performStoreAppointment()
         }
 
         loadSpecialties()
         listenSpecialtyChanges()
         listenDoctorAndDateChanges()
 
+    }
+
+    private fun performStoreAppointment() {
+        btnConfirm.isClickable = false
+        val jwt = preferences["jwt", ""]
+        val authHeader = "Bearer $jwt"
+        val description = tvConfirmDescription.text.toString()
+        val specialty = spinnerSpecialties.selectedItem as Specialty
+        val doctor = spinnerDoctors.selectedItem as Doctor
+        val scheduledDate = tvConfirmScheduledDate.text.toString()
+        val scheduledTime = tvConfirmScheduledTime.text.toString()
+        val type = tvConfirmType.text.toString()
+        val call = apiService.storeAppointment(authHeader, description, specialty.id, doctor.id, scheduledDate, scheduledTime, type)
+        call.enqueue(object : Callback<SimpleResponse> {
+            override fun onFailure(call: Call<SimpleResponse>, t: Throwable) {
+                toast(getString(R.string.create_appointment_error))
+            }
+
+            override fun onResponse(
+                call: Call<SimpleResponse>,
+                response: Response<SimpleResponse>
+            ) {
+                if (response.isSuccessful){
+                    toast(getString(R.string.create_appointment_success))
+                    finish()
+                }
+                else{
+                    toast(getString(R.string.create_appointment_error))
+                    btnConfirm.isClickable = true
+                }
+            }
+        })
     }
 
     private fun listenDoctorAndDateChanges() {
@@ -96,7 +135,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
             }
 
         }
-        etScheduledDate.addTextChangedListener(object: TextWatcher {
+        etScheduledDate.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -104,7 +143,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val doctor:Doctor = spinnerDoctors.selectedItem as Doctor
+                val doctor: Doctor = spinnerDoctors.selectedItem as Doctor
                 loadHours(doctor.id, etScheduledDate.text.toString())
             }
 
@@ -112,21 +151,21 @@ class CreateAppointmentActivity : AppCompatActivity() {
     }
 
     private fun loadHours(id: Int, date: String) {
-        if(date.isEmpty())
+        if (date.isEmpty())
             return
 
         val call = apiService.getHours(id, date)
         call.enqueue(object : Callback<Schedule> {
             override fun onFailure(call: Call<Schedule>, t: Throwable) {
-                Toast.makeText(this@CreateAppointmentActivity, getString(R.string.error_loading_hours), Toast.LENGTH_SHORT).show()
+                toast(getString(R.string.error_loading_hours))
             }
 
             override fun onResponse(call: Call<Schedule>, response: Response<Schedule>) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     tvSelectDoctorAndDate.visibility = View.GONE
                     val schedule = response.body()
                     //Toast.makeText(this@CreateAppointmentActivity, "morning: ${schedule?.morning?.size}, afternoon: ${schedule?.afternoon?.size}", Toast.LENGTH_SHORT).show()
-                    schedule?.let{
+                    schedule?.let {
                         val intervals = it.morning + it.afternoon
                         val hours = ArrayList<String>()
                         intervals.forEach { interval ->
@@ -145,7 +184,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
         spinnerSpecialties.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
-        }
+            }
 
             override fun onItemSelected(
                 adapter: AdapterView<*>?,
@@ -177,7 +216,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                 response: Response<ArrayList<Doctor>>
             ) {
                 if (response.isSuccessful) {
-                    response.body()?.let{
+                    response.body()?.let {
                         val doctors = it.toMutableList()
                         spinnerDoctors.adapter = ArrayAdapter(
                             this@CreateAppointmentActivity,
@@ -203,10 +242,12 @@ class CreateAppointmentActivity : AppCompatActivity() {
                 finish()
             }
 
-            override fun onResponse(call: Call<ArrayList<Specialty>>, response: Response<ArrayList<Specialty>>)
-            {
+            override fun onResponse(
+                call: Call<ArrayList<Specialty>>,
+                response: Response<ArrayList<Specialty>>
+            ) {
                 if (response.isSuccessful) { //codigo respuesta entre 200 y 300
-                    response.body()?.let{
+                    response.body()?.let {
                         val specialties = it.toMutableList()
                         spinnerSpecialties.adapter = ArrayAdapter(
                             this@CreateAppointmentActivity,
@@ -244,7 +285,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                 resources.getString(
                     R.string.date_format,
                     y,
-                    (m+1).twoDigits(),
+                    (m + 1).twoDigits(),
                     d.twoDigits()
                 )
             )
@@ -267,7 +308,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
 //        rgScheduledTime.removeAllViews()
         rgScheduledTimeLeft.removeAllViews()
         rgScheduledTimeRight.removeAllViews()
-        if (hours.isEmpty()){
+        if (hours.isEmpty()) {
             tvNotAvailableHours.visibility = View.VISIBLE
             return
         }

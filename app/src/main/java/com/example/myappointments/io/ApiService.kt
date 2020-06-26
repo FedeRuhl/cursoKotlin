@@ -5,6 +5,7 @@ import com.example.myappointments.Model.Doctor
 import com.example.myappointments.Model.Schedule
 import com.example.myappointments.Model.Specialty
 import com.example.myappointments.io.response.LoginResponse
+import com.example.myappointments.io.response.SimpleResponse
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -33,6 +34,27 @@ interface ApiService {
 
     @GET("appointments")
     fun getAppointments(@Header("Authorization") authHead:String): Call<ArrayList<Appointment>>
+
+    @POST("appointments")
+    @Headers("Accept: application/json")
+    fun storeAppointment(
+        @Header("Authorization") authHead:String,
+         @Query("description") description:String,
+         @Query("specialty_id") specialtyId:Int,
+         @Query("doctor_id") doctorId:Int,
+         @Query("scheduled_date") scheduledDate:String,
+         @Query("scheduled_time") scheduledTime:String,
+         @Query("type") type:String
+    ): Call<SimpleResponse>
+
+    @POST("register")
+    @Headers("Accept: application/json")
+    fun postRegister(
+        @Query("name") name:String,
+        @Query("email") email:String,
+        @Query("password") password:String,
+        @Query("password_confirmation") passwordConfirmation:String
+    ): Call<LoginResponse>
 
     companion object Factory{
         private const val BASE_URL = "http://167.99.65.203/api/"

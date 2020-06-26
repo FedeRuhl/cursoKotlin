@@ -51,4 +51,10 @@
     <string name="welcome_name">Bienvenido %1$s</string>
     <string name="login_failure">Los campos deben ser ingresados correctamente</string>
     <string name="item_appointment_created_at"> "Turno reservado el día %1$s con la siguiente descripción: " </string>
+    <string name="create_appointment_success">Turno confirmado</string>
+    <string name="create_appointment_error">Ocurrió un error inesperado reservando el turno. Intente nuevamente más tarde.</string>
+    <string name="tv_register_password_confirmation">Confirmar clave</string>
+    <string name="error_register_empty_fields">Por favor, complete todos los campos.</string>
+    <string name="error_register_password_do_not_match">Las contraseñas no coinciden</string>
+    <string name="error_register_user">Ha ocurrido un error al intentar registrar el usuario.</string>
 </resources>
