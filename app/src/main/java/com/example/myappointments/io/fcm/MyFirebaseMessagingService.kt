@@ -102,7 +102,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param token The new token.
      */
     private fun sendRegistrationToServer(jwt:String, token: String?) {
-//        TODO: Implement this method to send token to your app server.
 //        Log.d(TAG, "sendRegistrationTokenToServer($token)")
         if (token.isNullOrEmpty() || jwt.isEmpty())
             return
