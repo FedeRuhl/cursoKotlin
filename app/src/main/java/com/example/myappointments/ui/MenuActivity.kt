@@ -3,12 +3,14 @@ package com.example.myappointments.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.myappointments.util.PreferenceHelper
 import com.example.myappointments.util.PreferenceHelper.set
 import com.example.myappointments.util.PreferenceHelper.get
 import com.example.myappointments.R
 import com.example.myappointments.io.ApiService
 import com.example.myappointments.util.toast
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_menu.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,7 +22,7 @@ class MenuActivity : AppCompatActivity() {
         ApiService.create()
     }
 
-    private val preferences by lazy{
+    private val preferences by lazy {
         PreferenceHelper.defaultPrefs(this)
     }
 
@@ -28,12 +30,17 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        btnCreateAppointment.setOnClickListener{
+        val store = intent.getBooleanExtra("store_token", false)
+        if (store){
+            storeToken()
+        }
+
+        btnCreateAppointment.setOnClickListener {
             val intent = Intent(this, CreateAppointmentActivity::class.java)
             startActivity(intent)
         }
 
-        btnMyAppointments.setOnClickListener{
+        btnMyAppointments.setOnClickListener {
             val intent = Intent(this, AppointmentsActivity::class.java)
             startActivity(intent)
         }
@@ -43,10 +50,36 @@ class MenuActivity : AppCompatActivity() {
         }
     }
 
+    private fun storeToken() {
+        val jwt = preferences["jwt", ""]
+        val authHeader = "Bearer $jwt"
+
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this){ instanceIdResult ->
+            val deviceToken = instanceIdResult.token
+            val call = apiService.postToken(authHeader, deviceToken)
+            call.enqueue(object: Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.d(Companion.TAG, "Hubo un problema al registrar el token")
+                }
+
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful){
+                        Log.d(Companion.TAG, "Token registrado correctamente")
+                    }
+                    else{
+                        Log.d(Companion.TAG, "Hubo un problema al registrar el token")
+                    }
+                }
+
+            })
+        }
+
+    }
+
     private fun performLogout() {
         val jwt = preferences["jwt", ""]
         val call = apiService.postLogout("Bearer $jwt")
-        call.enqueue(object: Callback<Void>{
+        call.enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 toast(t.localizedMessage)
             }
@@ -60,11 +93,15 @@ class MenuActivity : AppCompatActivity() {
         })
     }
 
-    private fun clearSessionPreference(){
+    private fun clearSessionPreference() {
 //        val preferences = getSharedPreferences("general", Context.MODE_PRIVATE)
 //        val editor = preferences.edit()
 //        editor.putBoolean("session", false)
 //        editor.apply()
         preferences["jwt"] = ""
+    }
+
+    companion object {
+        private const val TAG = "MenuActivity"
     }
 }

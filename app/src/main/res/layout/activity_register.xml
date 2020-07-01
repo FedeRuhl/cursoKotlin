@@ -39,7 +39,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:autofillHints="etRegisterName"
+            tools:ignore="LabelFor" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +56,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:autofillHints="etRegisterEmail"
+            tools:ignore="LabelFor" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -69,7 +73,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:autofillHints="etRegisterPassword"
+            tools:ignore="LabelFor" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -84,7 +90,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:autofillHints="etRegisterPasswordConfirmation"
+            tools:ignore="LabelFor" />
 
         <Button
             android:id="@+id/btnRegister"

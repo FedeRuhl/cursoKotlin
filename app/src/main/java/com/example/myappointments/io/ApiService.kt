@@ -38,7 +38,7 @@ interface ApiService {
     @POST("appointments")
     @Headers("Accept: application/json")
     fun storeAppointment(
-        @Header("Authorization") authHead:String,
+        @Header("Authorization") authHeader:String,
          @Query("description") description:String,
          @Query("specialty_id") specialtyId:Int,
          @Query("doctor_id") doctorId:Int,
@@ -55,6 +55,13 @@ interface ApiService {
         @Query("password") password:String,
         @Query("password_confirmation") passwordConfirmation:String
     ): Call<LoginResponse>
+
+    @POST("fcm/token")
+    @Headers("Accept: application/json")
+    fun postToken(
+        @Header("Authorization") authHeader:String,
+        @Query("device_token") deviceToken:String
+    ): Call<Void>
 
     companion object Factory{
         private const val BASE_URL = "http://167.99.65.203/api/"

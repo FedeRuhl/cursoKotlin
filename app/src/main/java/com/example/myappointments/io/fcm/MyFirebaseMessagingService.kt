@@ -9,13 +9,26 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.OneTimeWorkRequest
 import com.example.myappointments.R
+import com.example.myappointments.io.ApiService
 import com.example.myappointments.ui.MainActivity
+import com.example.myappointments.util.PreferenceHelper
+import com.example.myappointments.util.PreferenceHelper.get
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    private val preferences by lazy {
+        PreferenceHelper.defaultPrefs(this)
+    }
+
+    private val apiService: ApiService by lazy {
+        ApiService.create()
+    }
 
     /**
      * Called when message is received.
@@ -41,7 +54,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a data payload.
         remoteMessage.data.isNotEmpty().let {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
-                handleNow()
+            handleNow()
         }
 
         // Check if message contains a notification payload.
@@ -63,11 +76,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      */
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
+        val jwt = preferences["jwt", ""]
+
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(token)
+        sendRegistrationToServer(jwt, token)
     }
     // [END on_new_token]
 
@@ -86,9 +101,28 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param token The new token.
      */
-    private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
-        Log.d(TAG, "sendRegistrationTokenToServer($token)")
+    private fun sendRegistrationToServer(jwt:String, token: String?) {
+//        TODO: Implement this method to send token to your app server.
+//        Log.d(TAG, "sendRegistrationTokenToServer($token)")
+        if (token.isNullOrEmpty() || jwt.isEmpty())
+            return
+
+        val authHeader = "Bearer $jwt"
+
+        val call = apiService.postToken(authHeader, token)
+        call.enqueue(object : Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d(TAG, "Hubo un problema al registrar el token")
+            }
+
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Token registrado correctamente")
+                } else {
+                    Log.d(TAG, "Hubo un problema al registrar el token")
+                }
+            }
+        })
     }
 
     /**
@@ -99,8 +133,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(messageBody: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-            PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0 /* Request code */, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
 
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -112,13 +148,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
+            val channel = NotificationChannel(
+                channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
