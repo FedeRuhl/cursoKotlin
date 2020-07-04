@@ -47,24 +47,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: ${remoteMessage.from}")
-
         // Check if message contains a data payload.
-        remoteMessage.data.isNotEmpty().let {
+        remoteMessage.data.isNotEmpty().let {//desde laravel usamos notification y no data, por lo que nunca debería entrar
+            Log.d(TAG, "From: ${remoteMessage.from}")
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
             handleNow()
         }
 
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
-            Log.d(TAG, "Message Notification Body: ${it.body}")
+            val title = it.title ?: getString(R.string.app_name)
+            val body = it.body
+
+            if (body != null)
+            sendNotification(title, body)
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        //sendNotification()
     }
     // [END receive_message]
 
@@ -129,7 +129,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(messageTitle:String, messageBody: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
@@ -141,7 +141,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_calendar)
-            .setContentTitle(getString(R.string.fcm_message)) //no se si mi recurso está bien definido
+            .setContentTitle(messageTitle)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)

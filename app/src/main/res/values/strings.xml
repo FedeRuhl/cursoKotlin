@@ -59,4 +59,12 @@
     <string name="error_register_user">Ha ocurrido un error al intentar registrar el usuario.</string>
     <string name="default_notification_channel_id">default_channel</string>
     <string name="fcm_message">title</string>
+    <string name="btn_edit_profile">Mi perfil</string>
+    <string name="label_edit_profile">Editar datos básicos</string>
+    <string name="label_phone">Número de teléfono</string>
+    <string name="label_address">Dirección</string>
+    <string name="btn_save">Guardar cambios</string>
+    <string name="profile_success_message">Los cambios se han guardado corretamente</string>
+    <string name="error_profile_name">¡El nombre es un dato importante!</string>
+    <string name="you_need_a_phone">¡Debes asociar un teléfono a tu cuenta!</string>
 </resources>

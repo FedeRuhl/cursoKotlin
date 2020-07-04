@@ -1,9 +1,6 @@
 package com.example.myappointments.io
 
-import com.example.myappointments.Model.Appointment
-import com.example.myappointments.Model.Doctor
-import com.example.myappointments.Model.Schedule
-import com.example.myappointments.Model.Specialty
+import com.example.myappointments.Model.*
 import com.example.myappointments.io.response.LoginResponse
 import com.example.myappointments.io.response.SimpleResponse
 import com.google.gson.GsonBuilder
@@ -61,6 +58,19 @@ interface ApiService {
     fun postToken(
         @Header("Authorization") authHeader:String,
         @Query("device_token") deviceToken:String
+    ): Call<Void>
+
+    @GET("user")
+    @Headers("Accept: application/json")
+    fun getUser(@Header("Authorization") authHead:String): Call<User>
+
+    @POST("user")
+    @Headers("Accept: application/json")
+    fun postUser(
+    @Header("Authorization") authHead:String,
+    @Query("name") name:String,
+    @Query("phone") phone:String,
+    @Query("address") address:String
     ): Call<Void>
 
     companion object Factory{
