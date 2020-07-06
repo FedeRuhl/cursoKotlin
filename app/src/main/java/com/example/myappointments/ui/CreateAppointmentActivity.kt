@@ -175,9 +175,7 @@ class CreateAppointmentActivity : AppCompatActivity() {
                     }
                 }
             }
-
         })
-        Toast.makeText(this, "Doctor: $id, date: $date", Toast.LENGTH_SHORT).show()
     }
 
     private fun listenSpecialtyChanges() {
