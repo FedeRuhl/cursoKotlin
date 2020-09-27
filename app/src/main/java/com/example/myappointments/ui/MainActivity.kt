@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                         loginResponse?.let {
                             createSessionPreference(loginResponse.access_token)
                             toast(getString(R.string.welcome_name, loginResponse.user.name))
+                            //toast("Role: " + loginResponse.user.role)
                             goToMenuActivity(isUserInput = true)
                         } ?: run { //401 Unauthorized
                             toast(getString(R.string.error_login_response))
